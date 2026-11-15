@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { pool } from "../../../db/pool.js";
 import { AppError } from "../../../utils/errors.js";
-import { h, idParam, pgCode, uid } from "../../utils/http.js";
+import { h, idParam, pgCode, uid } from "../../../utils/http.js";
 
 const color = z.string().regex(/^#[0-9A-Fa-f]{6}$/);
 const createSchema = z.object({
