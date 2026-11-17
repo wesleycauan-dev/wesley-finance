@@ -4,6 +4,8 @@ import { pool } from "../../../db/pool.js";
 import { AppError } from "../../../utils/errors.js";
 import { cents, h, idParam, isoDate, uid } from "../../../utils/http.js";
 
+// reúne o código da funcionalidade de metas financeiras
+
 const body = z.object({
   name: z.string().trim().min(1).max(120),
   targetCents: cents,
