@@ -2,6 +2,10 @@ import express from "express";
 import helmet from "helmet";
 import { env } from "./config/env.js";
 import {
+  billingRouter,
+  mpWebhookRouter,
+} from "./modules/billing/billing.routes.js";
+import {
   errorHandler,
   requireActiveAccess,
   requireAuth,
@@ -15,6 +19,8 @@ import { transactionsRouter } from "./modules/auth/transactions/transactions.rou
 export const app = express();
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 app.use("/api/auth", authRouter);
+app.use("/api/billing", billingRouter);
+app.use("/api/webhooks/mercadopago", mpWebhookRouter);
 
 // Rotas financeiras: autenticado + (proprietário ou assinatura ativa)
 const guard = [requireAuth, requireActiveAccess];
