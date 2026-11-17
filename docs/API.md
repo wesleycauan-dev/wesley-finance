@@ -16,3 +16,24 @@ Valores monetários são **inteiros em centavos** (`amountCents`). Datas em `YYY
 | GET            | /api/dashboard/summary       | `?month=YYYY-MM`: totais, saldo, despesas por categoria, série de 6 meses, metas |
 
 Isolamento: toda query filtra por `user_id` do token; a FK composta `(category_id,user_id)` impede, no banco, que um lançamento use categoria de outro usuário.
+
+# Assinaturas e pagamentos (Etapa 3)
+
+| Método | Rota                      | Descrição                                                                                              |
+| ------ | ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| POST   | /api/billing/checkout     | cria a assinatura no Mercado Pago e devolve `checkoutUrl` (redirecionar o usuário). Não libera acesso. |
+| GET    | /api/billing/status       | status, vencimento e preço                                                                             |
+| GET    | /api/billing/payments     | histórico de pagamentos do usuário (`page`, `limit`)                                                   |
+| POST   | /api/billing/cancel       | cancela; acesso mantido até o fim do período pago                                                      |
+| POST   | /api/webhooks/mercadopago | webhook (sem login; valida `x-signature` HMAC-SHA256)                                                  |
+
+## Fluxo seguro
+
+1. Usuário chama `/checkout` → status `pending`, é redirecionado ao checkout hospedado do Mercado Pago (nenhum dado de cartão passa pelo nosso servidor).
+2. O Mercado Pago notifica `/api/webhooks/mercadopago`. Validamos a assinatura em tempo constante.
+3. O corpo do webhook **não é confiável**: usamos só o `data.id` assinado para consultar a API do Mercado Pago e gravar o estado real. Também conferimos que a assinatura existe no nosso banco e que o valor é o nosso preço.
+4. Idempotência: pagamentos têm chave única (`mp_authorized_payment_id`); reenvios apenas atualizam a mesma linha.
+5. Acesso: `active`, ou `cancelled` dentro do período pago, com carência de 3 dias após o vencimento.
+
++## Configuração no painel do Mercado Pago
++Aplicação → Webhooks → URL `https://SEU-DOMINIO/api/webhooks/mercadopago`, eventos de **Planos e assinaturas** (`subscription_preapproval` e `subscription_authorized_payment`). Copie a chave secreta para `MP_WEBHOOK_SECRET`. Em desenvolvimento use um túnel (ngrok/cloudflared) e as credenciais de teste.
