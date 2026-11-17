@@ -16,6 +16,15 @@ const schema = z.object({
   OWNER_NAME: z.string().default("Wesley Cauan"),
   OWNER_EMAIL: z.string().email(),
   OWNER_PASSWORD: z.string().min(12),
+  MP_ACCESS_TOKEN: z
+    .string()
+    .optional()
+    .transform((v) => v || undefined),
+  MP_WEBHOOK_SECRET: z
+    .string()
+    .optional()
+    .transform((v) => v || undefined),
+  SUBSCRIPTION_PRICE_CENTS: z.coerce.number().int().positive().default(1990),
 });
 
 const parsed = schema.safeParse(process.env);
