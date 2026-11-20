@@ -3,16 +3,30 @@ import { pool } from "../db/pool.js";
 import { AppError } from "../utils/errors.js";
 import { verifyAccess } from "../utils/security.js";
 
-export const requireAuth: RequestHandler = (req, _res, next) => {
+export const requireAuth: RequestHandler = async (req, _res, next) => {
   const h = req.headers.authorization;
   if (!h?.startsWith("Bearer "))
     return next(new AppError(401, "Não autenticado", "UNAUTHENTICATED"));
+  let sub: string;
   try {
-    const p = verifyAccess(h.slice(7));
-    req.user = { id: p.sub, role: p.role };
-    next();
+    sub = verifyAccess(h.slice(7)).sub;
   } catch {
-    next(new AppError(401, "Token inválido ou expirado", "TOKEN_INVALID"));
+    return next(
+      new AppError(401, "Token inválido ou expirado", "TOKEN_INVALID"),
+    );
+  }
+  try {
+    // O papel vem do banco (não do token) e contas bloqueadas/excluídas perdem acesso imediatamente.
+    const { rows } = await pool.query(
+      "SELECT role FROM users WHERE id=$1 AND is_active AND deleted_at IS NULL",
+      [sub],
+    );
+    if (!rows[0])
+      return next(new AppError(401, "Conta indisponível", "ACCOUNT_DISABLED"));
+    req.user = { id: sub, role: rows[0].role };
+    next();
+  } catch (e) {
+    next(e);
   }
 };
 
@@ -27,7 +41,7 @@ export const requireActiveAccess: RequestHandler = async (req, _res, next) => {
     if (req.user?.role === "owner") return next();
     const { rows } = await pool.query(
       `SELECT 1 FROM subscriptions WHERE user_id=$1 AND status IN ('active','cancelled')
-+       AND current_period_end IS NOT NULL AND current_period_end + interval '3 days' > now()`,
+       AND current_period_end IS NOT NULL AND current_period_end + interval '3 days' > now()`,
       [req.user!.id],
     );
     if (!rows.length)
