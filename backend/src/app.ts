@@ -11,6 +11,8 @@ import {
   requireAuth,
 } from "./middleware/auth.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
+import { adminRouter } from "./modules/admin/admin.routes.js";
+import { privacyRouter } from "./modules/privacy/privacy.routes.js";
 import { categoriesRouter } from "./modules/auth/categories/categories.routes.js";
 import { dashboardRouter } from "./modules/auth/dashboard/dashboard.routes.js";
 import { goalsRouter } from "./modules/auth/goals/goals.routes.js";
@@ -19,6 +21,8 @@ import { transactionsRouter } from "./modules/auth/transactions/transactions.rou
 export const app = express();
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/privacy", privacyRouter);
 app.use("/api/billing", billingRouter);
 app.use("/api/webhooks/mercadopago", mpWebhookRouter);
 
