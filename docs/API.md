@@ -37,3 +37,22 @@ Isolamento: toda query filtra por `user_id` do token; a FK composta `(category_i
 
 +## Configuração no painel do Mercado Pago
 +Aplicação → Webhooks → URL `https://SEU-DOMINIO/api/webhooks/mercadopago`, eventos de **Planos e assinaturas** (`subscription_preapproval` e `subscription_authorized_payment`). Copie a chave secreta para `MP_WEBHOOK_SECRET`. Em desenvolvimento use um túnel (ngrok/cloudflared) e as credenciais de teste.
+
+# Administração (Etapa 5) — somente proprietário
+
+| Método | Rota                        | Descrição                                          |
+| ------ | --------------------------- | -------------------------------------------------- |
+| GET    | /api/admin/overview         | usuários, assinaturas por status, MRR, receita     |
+| GET    | /api/admin/users            | `search`, `status`, `page`, `limit`                |
+| PATCH  | /api/admin/users/:id/active | `{isActive}` bloqueia/desbloqueia e revoga sessões |
+| GET    | /api/admin/payments         | pagamentos recentes                                |
+
++O admin não tem acesso aos lançamentos, categorias ou metas dos usuários. O papel é lido do banco a cada requisição, e contas bloqueadas perdem acesso na hora.
+
+# LGPD
+
+| Método | Rota                 | Descrição                                                                                                                                      |
+| ------ | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | /api/privacy/export  | JSON com todos os dados do titular                                                                                                             |
+| DELETE | /api/privacy/account | `{password}` apaga dados e anonimiza o cadastro; cancela a cobrança antes. Mantém pagamentos/consentimentos/auditoria sem identificação direta |
+| PUT    | /api/preferences     | tema e cores                                                                                                                                   |
