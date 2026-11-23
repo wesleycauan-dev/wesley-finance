@@ -1,9 +1,11 @@
 # Arquitetura — Wesley Finance
 
 ## Stack
+
 React + TypeScript + Vite + Framer Motion (frontend) · Node.js + Express + TypeScript (API REST) · PostgreSQL 16.
 
 ## Decisões de segurança (Etapa 1)
+
 - **Senhas:** Argon2id. Política mínima de 10 caracteres com maiúscula, minúscula e número.
 - **Sessão:** access token JWT (15 min, em memória no frontend) + refresh token opaco (30 dias) em cookie `httpOnly`, `SameSite=Strict`, `Secure` em produção. Só o **hash SHA-256** do refresh token é salvo no banco.
 - **Rotação com detecção de reuso:** cada refresh gera um novo token; reutilizar um token já revogado revoga toda a família.
@@ -14,11 +16,14 @@ React + TypeScript + Vite + Framer Motion (frontend) · Node.js + Express + Type
 - **LGPD:** consentimento versionado (`consents`), minimização de dados, `audit_logs`, e (Etapa 4) exportação dos dados do titular, exclusão de conta e anonimização.
 
 ## Modelo de dados atual
+
 users · refresh_tokens · user_preferences · subscriptions · consents · audit_logs
 (Etapa 2 acrescenta: categories, transactions, goals, payments; Etapa 3: eventos de webhook.)
 
 ## Roadmap
+
 1. ✅ Arquitetura, PostgreSQL, migrations, autenticação
+   (Etapas 2–5 concluídas: API financeira, Mercado Pago, frontend, admin, LGPD, testes e deploy.)
 2. API financeira: categorias, receitas, despesas, metas, dashboard (agregações)
 3. Mercado Pago: assinatura, webhook com validação de assinatura x-signature e idempotência, histórico de pagamentos
 4. Frontend React: login/cadastro, dashboard, gráficos, temas, Framer Motion, acessibilidade
