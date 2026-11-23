@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      {
+        POSTGRES_USER: wesley,
+        POSTGRES_PASSWORD: "${DB_PASSWORD}",
+        POSTGRES_DB: wesley_finance,
+      }
+    volumes: [pgdata:/var/lib/postgresql/data]
+  api:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    depends_on: [db]
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment: { DOMAIN: "${DOMAIN}" }
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./frontend/dist:/srv/web:ro
+      - caddy_data:/data
+    depends_on: [api]
+volumes:
+  pgdata:
+  caddy_data:
