@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./auth";
 import Layout from "./components/Layout";
+import Admin from "./pages/Admin";
 import Auth from "./pages/Auth";
 import Billing from "./pages/Billing";
 import Categories from "./pages/Categories";
@@ -10,7 +11,7 @@ import Privacy from "./pages/Privacy";
 import Settings from "./pages/Settings";
 import Transactions from "./pages/Transactions";
 
-function Protected({ access }: { access?: boolean }) {
+function Protected({ access, owner }: { access?: boolean; owner?: boolean }) {
   const { user } = useAuth();
   if (user === undefined)
     return (
@@ -19,6 +20,7 @@ function Protected({ access }: { access?: boolean }) {
       </p>
     );
   if (!user) return <Navigate to="/entrar" replace />;
+  if (owner && user.role !== "owner") return <Navigate to="/" replace />;
   if (access && !user.hasAccess) return <Navigate to="/assinatura" replace />;
   return <Layout />;
 }
@@ -38,6 +40,9 @@ export default function App() {
       <Route element={<Protected />}>
         <Route path="/assinatura" element={<Billing />} />
         <Route path="/configuracoes" element={<Settings />} />
+      </Route>
+      <Route element={<Protected owner />}>
+        <Route path="/admin" element={<Admin />} />
       </Route>
       <Route
         path="/assinatura/retorno"

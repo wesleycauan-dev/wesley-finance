@@ -8,7 +8,7 @@ const links = [
   { to: "/categorias", label: "Categorias", access: true },
   { to: "/metas", label: "Metas", access: true },
   { to: "/assinatura", label: "Assinatura" },
-  { to: "/configuracoes", label: "Aparência" },
+  { to: "/configuracoes", label: "Conta" },
 ];
 
 export default function Layout() {
@@ -32,6 +32,9 @@ export default function Layout() {
                 {l.label}
               </NavLink>
             ))}
+          {user?.role === "owner" && (
+            <NavLink to="/admin">Administração</NavLink>
+          )}
         </nav>
         <div className="who">
           <span>{user?.name}</span>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../auth";
+import DataRights from "../components/DataRights";
 import { ErrorMsg, Field } from "../components/Modal";
 import { applyTheme, DEFAULT_PREFS, type Prefs } from "../theme";
 import { contrast, readable } from "../utils";
@@ -31,7 +32,7 @@ export default function Settings() {
   return (
     <>
       <header className="page-head">
-        <h1>Aparência</h1>
+        <h1>Minha conta</h1>
       </header>
       <p className="muted">
         Escolha o tema e as cores da sua conta. A mudança aparece na hora e só
@@ -93,6 +94,7 @@ export default function Settings() {
         </button>
         {saved && <span role="status">Aparência salva.</span>}
       </div>
+      <DataRights />
     </>
   );
 }

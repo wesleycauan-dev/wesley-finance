@@ -32,7 +32,16 @@ export default function Privacy() {
         <h2>Seus direitos (LGPD, art. 18)</h2>
         <p>
           Você pode solicitar acesso, correção, portabilidade e eliminação dos
-          seus dados, e revogar o consentimento, pelo e-mail do encarregado.
+          seus dados, e revogar o consentimento, pelo e-mail do encarregado. Em
+          Minha conta você também pode baixar seus dados e excluir sua conta
+          sozinho.
+        </p>
+        <h2>Retenção</h2>
+        <p>
+          Ao excluir a conta, apagamos seus lançamentos, categorias, metas e
+          preferências. Mantemos apenas registros de pagamento, consentimento e
+          segurança, sem identificação direta, para cumprir obrigações legais e
+          fiscais.
         </p>
       </article>
     </div>
