@@ -6,7 +6,7 @@ import { env } from "../config/env.js"; // contém as configurações do ambient
 export const pool = new pg.Pool({
   connectionString: env.DATABASE_URL,
   max: 10,
-  ssl: env.NODE_ENV === "production" ? { rejectUnauthorized: true } : undefined,
+  ssl: env.DATABASE_SSL === "true" ? { rejectUnauthorized: true } : undefined,
 });
 
 export async function tx<T>(fn: (c: pg.PoolClient) => Promise<T>): Promise<T> {

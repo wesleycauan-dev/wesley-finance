@@ -8,6 +8,7 @@ const schema = z.object({
   PORT: z.coerce.number().default(3333),
   FRONTEND_URL: z.string().url(),
   DATABASE_URL: z.string().min(1),
+  DATABASE_SSL: z.enum(["true", "false"]).default("false"),
   JWT_ACCESS_SECRET: z
     .string()
     .min(32, "JWT_ACCESS_SECRET deve ter 32+ caracteres"),
