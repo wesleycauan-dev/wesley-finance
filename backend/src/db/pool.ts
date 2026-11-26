@@ -1,12 +1,15 @@
-// configura conexões com o PostgreSQL e oferece uma função para executar operações dentro de uma transação.
-
-import pg from "pg"; // é a biblioteca usada para conectar e consultar o PostgreSQL.
-import { env } from "../config/env.js"; // contém as configurações do ambiente, como a URL do banco e o modo de execução.
+import pg from "pg";
+import { env } from "../config/env.js";
 
 export const pool = new pg.Pool({
   connectionString: env.DATABASE_URL,
   max: 10,
+  connectionTimeoutMillis: 15_000,
   ssl: env.DATABASE_SSL === "true" ? { rejectUnauthorized: true } : undefined,
+});
+
+pool.on("error", (err) => {
+  console.error("Conexão ociosa com o banco foi encerrada:", err.message);
 });
 
 export async function tx<T>(fn: (c: pg.PoolClient) => Promise<T>): Promise<T> {

@@ -9,7 +9,8 @@
     "start": "node dist/server.js",
     "migrate": "tsx src/db/migrate.ts",
     "seed:owner": "tsx src/db/seed-owner.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start:render": "node dist/db/migrate.js && (node dist/db/seed-owner.js || true) && node dist/server.js"
   },
   "dependencies": {
     "argon2": "^0.41.1",
