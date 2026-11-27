@@ -43,7 +43,7 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
         aria-labelledby="t"
       >
         <div className="brand">
-          <span className="mark" aria-hidden="true" />
+          <img src="public/favicon.svg" alt="Logo" width={28} height={28} />
           Wesley Finance
         </div>
         <h1 id="t">{reg ? "Crie sua conta" : "Entre na sua conta"}</h1>
