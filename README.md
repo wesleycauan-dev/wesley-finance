@@ -36,8 +36,3 @@ O Wesley Finance permite que cada usuário controle suas receitas, despesas e me
 
 React · TypeScript · Vite · Framer Motion · Recharts · Node.js · Express · PostgreSQL · Docker · Mercado Pago · Render · Neon
 
-
-
-## Autor
-
-**Wesley Cauan**
