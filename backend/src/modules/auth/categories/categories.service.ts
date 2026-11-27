@@ -17,7 +17,9 @@ const DEFAULTS: [string, "income" | "expense", string][] = [
 export async function seedDefaultCategories(c: PoolClient, userId: string) {
   await c.query(
     `INSERT INTO categories(user_id,name,type,color)
-     SELECT $1, n, t::transaction_type, col FROM unnest($2::text[], $3::text[], $4::text[]) AS d(n,t,col)`,
+     SELECT $1, n, t::transaction_type, col
+     FROM unnest($2::text[], $3::text[], $4::text[]) AS d(n,t,col)
+     ON CONFLICT (user_id, type, name) DO NOTHING`,
     [
       userId,
       DEFAULTS.map((d) => d[0]),

@@ -1,6 +1,7 @@
 import { env } from "../config/env.js";
 import { pool, tx } from "./pool.js";
 import { hashPassword } from "../utils/security.js";
+import { seedDefaultCategories } from "../modules/auth/categories/categories.service.js";
 
 const hash = await hashPassword(env.OWNER_PASSWORD);
 await tx(async (c) => {
@@ -20,6 +21,7 @@ await tx(async (c) => {
     `INSERT INTO subscriptions(user_id,status) VALUES ($1,'active') ON CONFLICT (user_id) DO UPDATE SET status='active', current_period_end=NULL`,
     [id],
   );
+  await seedDefaultCategories(c, id);
 });
 console.log("Proprietário criado/atualizado:", env.OWNER_EMAIL);
 await pool.end();

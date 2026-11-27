@@ -46,7 +46,11 @@ goalsRouter.put(
     const b = body.parse(req.body);
     const { rows } = await pool.query(
       `UPDATE goals SET name=$3,target_cents=$4,deadline=$5,updated_at=now(),
-       status = CASE WHEN status='active' AND current_cents >= $4 THEN 'completed'::goal_status ELSE status END
+       status = CASE
+         WHEN status='active' AND current_cents >= $4 THEN 'completed'::goal_status
+         WHEN status='completed' AND current_cents < $4 THEN 'active'::goal_status
+         ELSE status
+       END
      WHERE id=$1 AND user_id=$2 RETURNING ${COLS}`,
       [id, uid(req), b.name, b.targetCents, b.deadline ?? null],
     );

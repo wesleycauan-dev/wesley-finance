@@ -93,10 +93,13 @@ function TxForm({
           <select
             required
             value={f.categoryId}
+            disabled={options.length === 0}
             onChange={(e) => setF({ ...f, categoryId: e.target.value })}
           >
             <option value="" disabled>
-              Selecione
+              {options.length === 0
+                ? "Nenhuma categoria disponível"
+                : "Selecione"}
             </option>
             {options.map((c) => (
               <option key={c.id} value={c.id}>
@@ -127,6 +130,7 @@ function TxForm({
             <input
               type="date"
               required
+              min={tx ? undefined : today()}
               value={f.occurredOn}
               onChange={(e) => setF({ ...f, occurredOn: e.target.value })}
             />

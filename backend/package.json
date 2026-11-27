@@ -9,6 +9,7 @@
     "start": "node dist/server.js",
     "migrate": "tsx src/db/migrate.ts",
     "seed:owner": "tsx src/db/seed-owner.ts",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "start:render": "node dist/db/migrate.js && (node dist/db/seed-owner.js || true) && node dist/server.js"
   },
@@ -31,6 +32,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.9.0",
     "@types/pg": "^8.11.10",
+    "supertest": "^7.3.2",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^5.1.1"

@@ -8,7 +8,13 @@ export const toCents = (s: string) => {
 };
 export const fromCents = (c: number) => (c / 100).toFixed(2).replace(".", ",");
 export const fmtDate = (iso: string) => iso.split("-").reverse().join("/");
-export const today = () => new Date().toISOString().slice(0, 10);
+export const today = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 const lum = (hex: string) => {
   const [r, g, b] = [1, 3, 5]
