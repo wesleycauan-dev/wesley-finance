@@ -6,7 +6,7 @@ const hash = await hashPassword(env.OWNER_PASSWORD);
 await tx(async (c) => {
   const r = await c.query(
     `INSERT INTO users(name,email,password_hash,role) VALUES ($1,$2,$3,'owner')
-          ON CONFLICT (email) DO UPDATE SET role='owner', name=EXCLUDED.name,
+     ON CONFLICT (email) DO UPDATE SET role='owner', name=EXCLUDED.name,
        password_hash=EXCLUDED.password_hash, is_active=true, failed_login_attempts=0, locked_until=NULL
      RETURNING id`,
     [env.OWNER_NAME, env.OWNER_EMAIL, hash],
