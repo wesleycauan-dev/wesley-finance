@@ -21,7 +21,7 @@ export default function Layout() {
       </a>
       <aside className="side">
         <div className="brand">
-          <img src="public/favicon.svg" alt="Logo" width={28} height={28} />
+          <span className="mark" aria-hidden="true" />
           Wesley Finance
         </div>
         <nav aria-label="Principal">
